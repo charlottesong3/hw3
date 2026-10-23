@@ -11,9 +11,7 @@
 #include "circuit.h"
 #include "event.h"
 
-Circuit::Circuit() : m_current_time(0)
-{
-    
+Circuit::Circuit(): m_current_time(0), m_pq(2, EventLess()) { 
 }
 
 Circuit::~Circuit()
@@ -109,7 +107,26 @@ bool Circuit::parse(const char* fname)
                     getline(ss, s_output, ',');
                     m_gates.push_back(new Or2Gate(m_wires[stoi(s_in1)], m_wires[stoi(s_in2)], m_wires[stoi(s_output)]));
                 }
-                //Add code here to support the NOT gate type
+
+                //ADDING NOT 
+                if (s_type == "NOT") {
+                      std::string s_input;
+
+                      
+                      std::string s_output;
+
+                      getline(ss, s_input, ','); //:#
+                      getline(ss, s_output, ',');
+
+                      m_gates.push_back(
+                        //:D
+                          new NotGate(
+                              m_wires[stoi(s_input)], 
+
+                              m_wires[stoi(s_output)]
+                          )
+                      );
+                  }
             }
         }
         if(line == "INJECT")
